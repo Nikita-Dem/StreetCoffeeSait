@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Street Coffee - Онлайн-заказ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2B48C;
+            --accent-color: #A0522D;
+            --light-color: #F5F5DC;
+            --dark-color: #3E2723;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: var(--light-color) !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 40px 0;
+        }
+        
+        .order-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+        
+        .cart-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        
+        .delivery-option {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .delivery-option:hover {
+            border-color: var(--secondary-color);
+        }
+        
+        .delivery-option.selected {
+            border-color: var(--primary-color);
+            background-color: #f8f5f0;
+        }
+        
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-total {
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .payment-method {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--secondary-color);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background-color: #f8f5f0;
+        }
+        
+        .confirmation-success {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .confirmation-success i {
+            font-size: 4em;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .empty-cart i {
+            font-size: 4em;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+        
+        .step.active .step-number {
+            background: var(--primary-color);
+        }
+        
+        .step.completed .step-number {
+            background: var(--accent-color);
+        }
+        
+        .menu-category-order {
+            margin-bottom: 30px;
+        }
+        
+        .category-title-order {
+            color: var(--accent-color);
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+        
+        .order-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .cart-badge {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-coffee"></i> Street Coffee
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Меню</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="order.html">Онлайн-заказ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="promotions.html">Акции</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacts.html">Контакты</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Бейдж корзины -->
+    <div class="cart-badge">
+        <button class="btn btn-primary rounded-pill p-3 shadow" data-bs-toggle="modal" data-bs-target="#cartModal">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge bg-danger rounded-pill ms-1">{{ cartTotalQuantity }}</span>
+        </button>
+    </div>
+
+    <div class="container my-5" id="app">
+        <h1 class="section-title text-center">Онлайн-заказ</h1>
+        
+        <div class="order-container">
+            <!-- Индикатор шагов -->
+            <div class="step-indicator">
+                <div class="step" :class="{ active: currentStep === 1, completed: currentStep > 1 }">
+                    <div class="step-number">1</div>
+                    <div>Меню</div>
+                </div>
+                <div class="step" :class="{ active: currentStep === 2, completed: currentStep > 2 }">
+                    <div class="step-number">2</div>
+                    <div>Доставка</div>
+                </div>
+                <div class="step" :class="{ active: currentStep === 3, completed: currentStep > 3 }">
+                    <div class="step-number">3</div>
+                    <div>Оплата</div>
+                </div>
+                <div class="step" :class="{ active: currentStep === 4 }">
+                    <div class="step-number">4</div>
+                    <div>Подтверждение</div>
+                </div>
+            </div>
+
+            <div class="step-content">
+                <!-- Шаг 1: Меню -->
+                <div v-if="currentStep === 1" class="row">
+                    <div class="col-lg-8">
+                        <div class="menu-category-order">
+                            <h3 class="category-title-order">
+                                <i class="fas fa-coffee me-2"></i>Кофе
+                            </h3>
+                            
+                            <div class="order-item" v-for="item in coffeeItems" :key="item.id">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ item.name }}</h6>
+                                    <small class="text-muted">{{ item.description }}</small>
+                                    <div class="mt-1 text-primary fw-bold">{{ item.price }} ₽</div>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="quantity-btn" @click="decreaseQuantity(item)">-</button>
+                                    <input type="text" class="quantity-input" :value="getItemQuantity(item.id)" readonly>
+                                    <button class="quantity-btn" @click="increaseQuantity(item)">+</button>
+                                    <button class="btn btn-sm btn-primary ms-2" @click="addToCart(item)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-category-order">
+                            <h3 class="category-title-order">
+                                <i class="fas fa-cookie me-2"></i>Десерты
+                            </h3>
+                            
+                            <div class="order-item" v-for="item in dessertItems" :key="item.id">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ item.name }}</h6>
+                                    <small class="text-muted">{{ item.description }}</small>
+                                    <div class="mt-1 text-primary fw-bold">{{ item.price }} ₽</div>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="quantity-btn" @click="decreaseQuantity(item)">-</button>
+                                    <input type="text" class="quantity-input" :value="getItemQuantity(item.id)" readonly>
+                                    <button class="quantity-btn" @click="increaseQuantity(item)">+</button>
+                                    <button class="btn btn-sm btn-primary ms-2" @click="addToCart(item)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Корзина -->
+                    <div class="col-lg-4">
+                        <div class="order-summary">
+                            <h4 class="mb-4">Ваш заказ</h4>
+                            
+                            <div class="summary-items mb-3">
+                                <div v-if="cart.length === 0" class="text-muted text-center py-3">
+                                    <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+                                    <p>Корзина пуста</p>
+                                </div>
+                                <div v-else>
+                                    <div class="cart-item" v-for="(item, index) in cart" :key="index">
+                                        <div>
+                                            <div class="fw-bold">{{ item.name }}</div>
+                                            <small class="text-muted">{{ item.quantity }} × {{ item.price }} ₽</small>
+                                        </div>
+                                        <div class="fw-bold">{{ (item.price * item.quantity) }} ₽</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="summary-item">
+                                <span>Сумма:</span>
+                                <span>{{ subtotal }} ₽</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Доставка:</span>
+                                <span>{{ deliveryCost }} ₽</span>
+                            </div>
+                            <div class="summary-item summary-total">
+                                <span>Итого:</span>
+                                <span>{{ total }} ₽</span>
+                            </div>
+
+                            <button class="btn btn-primary w-100 mt-3" @click="nextStep" :disabled="cart.length === 0">
+                                Оформить заказ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 2: Доставка -->
+                <div v-if="currentStep === 2" class="row">
+                    <div class="col-lg-8">
+                        <div class="form-section">
+                            <h4 class="mb-4">Способ получения</h4>
+                            <div class="delivery-option" 
+                                 :class="{ selected: deliveryOption === 'delivery' }"
+                                 @click="deliveryOption = 'delivery'">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" v-model="deliveryOption" value="delivery" id="delivery">
+                                    <label class="form-check-label fw-bold" for="delivery">
+                                        Доставка
+                                    </label>
+                                </div>
+                                <p class="mb-0 mt-2">Доставим ваш заказ по указанному адресу</p>
+                                <small class="text-muted">Стоимость доставки: 150 ₽</small>
+                            </div>
+                            
+                            <div class="delivery-option" 
+                                 :class="{ selected: deliveryOption === 'pickup' }"
+                                 @click="deliveryOption = 'pickup'">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" v-model="deliveryOption" value="pickup" id="pickup">
+                                    <label class="form-check-label fw-bold" for="pickup">
+                                        Самовывоз
+                                    </label>
+                                </div>
+                                <p class="mb-0 mt-2">Заберите заказ в нашей кофейне</p>
+                                <small class="text-muted">Бесплатно</small>
+                            </div>
+                        </div>
+
+                        <div class="form-section" v-if="deliveryOption === 'delivery'">
+                            <h4 class="mb-4">Адрес доставки</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Улица</label>
+                                    <input type="text" class="form-control" v-model="deliveryAddress.street" placeholder="ул. Примерная">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Дом</label>
+                                    <input type="text" class="form-control" v-model="deliveryAddress.house" placeholder="123">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Квартира</label>
+                                    <input type="text" class="form-control" v-model="deliveryAddress.apartment" placeholder="45">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section" v-if="deliveryOption === 'pickup'">
+                            <h4 class="mb-4">Время самовывоза</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Дата</label>
+                                    <input type="date" class="form-control" v-model="pickupInfo.date">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Время</label>
+                                    <input type="time" class="form-control" v-model="pickupInfo.time">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="mb-4">Контактная информация</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Имя</label>
+                                    <input type="text" class="form-control" v-model="contactInfo.name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Телефон</label>
+                                    <input type="tel" class="form-control" v-model="contactInfo.phone" placeholder="+7 (999) 123-45-67" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Комментарий к заказу</label>
+                                    <textarea class="form-control" v-model="contactInfo.comment" rows="3" placeholder="Особые пожелания..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="order-summary">
+                            <h4 class="mb-4">Ваш заказ</h4>
+                            <div class="summary-items mb-3">
+                                <div class="cart-item" v-for="(item, index) in cart" :key="index">
+                                    <div>
+                                        <div class="fw-bold">{{ item.name }}</div>
+                                        <small class="text-muted">{{ item.quantity }} × {{ item.price }} ₽</small>
+                                    </div>
+                                    <div class="fw-bold">{{ (item.price * item.quantity) }} ₽</div>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <span>Сумма:</span>
+                                <span>{{ subtotal }} ₽</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Доставка:</span>
+                                <span>{{ deliveryCost }} ₽</span>
+                            </div>
+                            <div class="summary-item summary-total">
+                                <span>Итого:</span>
+                                <span>{{ total }} ₽</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-secondary" @click="prevStep">Назад</button>
+                            <button class="btn btn-primary" @click="nextStep" :disabled="!isDeliveryStepValid">
+                                Продолжить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 3: Оплата -->
+                <div v-if="currentStep === 3" class="row">
+                    <div class="col-lg-8">
+                        <div class="form-section">
+                            <h4 class="mb-4">Способ оплаты</h4>
+                            <div class="payment-method" 
+                                 :class="{ selected: paymentMethod === 'card' }"
+                                 @click="paymentMethod = 'card'">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" v-model="paymentMethod" value="card" id="card">
+                                    <label class="form-check-label fw-bold" for="card">
+                                        Банковская карта
+                                    </label>
+                                </div>
+                                <p class="mb-0 mt-2">Оплата онлайн банковской картой</p>
+                            </div>
+                            
+                            <div class="payment-method" 
+                                 :class="{ selected: paymentMethod === 'cash' }"
+                                 @click="paymentMethod = 'cash'">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" v-model="paymentMethod" value="cash" id="cash">
+                                    <label class="form-check-label fw-bold" for="cash">
+                                        Наличными
+                                    </label>
+                                </div>
+                                <p class="mb-0 mt-2">Оплата наличными при получении</p>
+                            </div>
+                        </div>
+
+                        <div class="form-section" v-if="paymentMethod === 'card'">
+                            <h4 class="mb-4">Данные карты</h4>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Номер карты</label>
+                                    <input type="text" class="form-control" v-model="cardInfo.number" placeholder="1234 5678 9012 3456">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Срок действия</label>
+                                    <input type="text" class="form-control" v-model="cardInfo.expiry" placeholder="ММ/ГГ">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" v-model="cardInfo.cvv" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="order-summary">
+                            <h4 class="mb-4">Ваш заказ</h4>
+                            <div class="summary-items mb-3">
+                                <div class="cart-item" v-for="(item, index) in cart" :key="index">
+                                    <div>
+                                        <div class="fw-bold">{{ item.name }}</div>
+                                        <small class="text-muted">{{ item.quantity }} × {{ item.price }} ₽</small>
+                                    </div>
+                                    <div class="fw-bold">{{ (item.price * item.quantity) }} ₽</div>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <span>Сумма:</span>
+                                <span>{{ subtotal }} ₽</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Доставка:</span>
+                                <span>{{ deliveryCost }} ₽</span>
+                            </div>
+                            <div class="summary-item summary-total">
+                                <span>Итого:</span>
+                                <span>{{ total }} ₽</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-secondary" @click="prevStep">Назад</button>
+                            <button class="btn btn-primary" @click="nextStep" :disabled="!isPaymentStepValid">
+                                Оплатить {{ total }} ₽
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Шаг 4: Подтверждение -->
+                <div v-if="currentStep === 4" class="confirmation-success">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Заказ успешно оформлен!</h3>
+                    <p class="lead">Номер вашего заказа: <strong>#{{ orderNumber }}</strong></p>
+                    <p>Мы свяжемся с вами в ближайшее время для подтверждения заказа.</p>
+                    <div class="mt-4">
+                        <button class="btn btn-primary me-3" @click="newOrder">Сделать новый заказ</button>
+                        <a href="index.html" class="btn btn-outline-primary">На главную</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-coffee"></i> Street Coffee</h5>
+                    <p>Лучший кофе в городе с доставкой на дом или навынос.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-light me-3"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Контакты</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> ул. Примерная, 123</p>
+                    <p><i class="fas fa-phone"></i> +7 (924) 003-18-58</p>
+                    <p><i class="fas fa-envelope"></i> nikitadem220@gmail.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Часы работы</h5>
+                    <p>Пн-Пт: 8:00 - 22:00</p>
+                    <p>Сб-Вс: 9:00 - 23:00</p>
+                    <a href="contacts.html" class="btn btn-outline-light">Как добраться</a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2023 Street Coffee. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    currentStep: 1,
+                    cart: [],
+                    coffeeItems: [
+                        { id: 1, name: 'Эспрессо', description: 'Классический крепкий кофе', price: 180 },
+                        { id: 2, name: 'Капучино', description: 'Эспрессо с молочной пенкой', price: 280 },
+                        { id: 3, name: 'Латте', description: 'Нежный кофе с молоком', price: 250 },
+                        { id: 4, name: 'Американо', description: 'Эспрессо с горячей водой', price: 200 },
+                        { id: 5, name: 'Раф кофе', description: 'Нежный кофе со сливками', price: 320 },
+                        { id: 6, name: 'Флэт Уайт', description: 'Кофе с тонкой молочной пенкой', price: 270 }
+                    ],
+                    dessertItems: [
+                        { id: 7, name: 'Тирамису', description: 'Итальянский десерт с кофе', price: 350 },
+                        { id: 8, name: 'Чизкейк Нью-Йорк', description: 'Классический чизкейк', price: 320 },
+                        { id: 9, name: 'Круассан с шоколадом', description: 'Свежий круассан', price: 180 },
+                        { id: 10, name: 'Макарун ассорти', description: '3 штуки разных вкусов', price: 280 },
+                        { id: 11, name: 'Медовик', description: 'Традиционный русский торт', price: 300 },
+                        { id: 12, name: 'Брауни', description: 'Шоколадный пирог с орехами', price: 220 }
+                    ],
+                    deliveryOption: 'delivery',
+                    deliveryAddress: {
+                        street: '',
+                        house: '',
+                        apartment: ''
+                    },
+                    pickupInfo: {
+                        date: '',
+                        time: ''
+                    },
+                    contactInfo: {
+                        name: '',
+                        phone: '',
+                        comment: ''
+                    },
+                    paymentMethod: 'card',
+                    cardInfo: {
+                        number: '',
+                        expiry: '',
+                        cvv: ''
+                    },
+                    orderNumber: Math.floor(Math.random() * 10000) + 1000
+                }
+            },
+            computed: {
+                cartTotalQuantity() {
+                    return this.cart.reduce((total, item) => total + item.quantity, 0);
+                },
+                subtotal() {
+                    return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                },
+                deliveryCost() {
+                    return this.deliveryOption === 'delivery' ? 150 : 0;
+                },
+                total() {
+                    return this.subtotal + this.deliveryCost;
+                },
+                isDeliveryStepValid() {
+                    if (!this.contactInfo.name || !this.contactInfo.phone) return false;
+                    if (this.deliveryOption === 'delivery') {
+                        return this.deliveryAddress.street && this.deliveryAddress.house;
+                    } else if (this.deliveryOption === 'pickup') {
+                        return this.pickupInfo.date && this.pickupInfo.time;
+                    }
+                    return true;
+                },
+                isPaymentStepValid() {
+                    if (this.paymentMethod === 'card') {
+                        return this.cardInfo.number && this.cardInfo.expiry && this.cardInfo.cvv;
+                    }
+                    return true;
+                }
+            },
+            methods: {
+                getItemQuantity(itemId) {
+                    const item = this.cart.find(item => item.id === itemId);
+                    return item ? item.quantity : 0;
+                },
+                addToCart(item) {
+                    const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        this.cart.push({
+                            ...item,
+                            quantity: 1
+                        });
+                    }
+                    
+                    this.showNotification(`${item.name} добавлен в корзину`);
+                },
+                increaseQuantity(item) {
+                    const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        this.cart.push({
+                            ...item,
+                            quantity: 1
+                        });
+                    }
+                },
+                decreaseQuantity(item) {
+                    const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
+                    
+                    if (existingItem) {
+                        if (existingItem.quantity > 1) {
+                            existingItem.quantity--;
+                        } else {
+                            this.cart = this.cart.filter(cartItem => cartItem.id !== item.id);
+                        }
+                    }
+                },
+                removeFromCart(index) {
+                    this.cart.splice(index, 1);
+                },
+                nextStep() {
+                    if (this.currentStep < 4) {
+                        this.currentStep++;
+                    }
+                    if (this.currentStep === 4) {
+                        this.orderNumber = Math.floor(Math.random() * 10000) + 1000;
+                        // Очищаем корзину после успешного заказа
+                        this.cart = [];
+                        localStorage.removeItem('streetCoffeeCart');
+                    }
+                },
+                prevStep() {
+                    if (this.currentStep > 1) {
+                        this.currentStep--;
+                    }
+                },
+                newOrder() {
+                    // Сброс всех данных для нового заказа
+                    this.currentStep = 1;
+                    this.cart = [];
+                    this.deliveryOption = 'delivery';
+                    this.deliveryAddress = { street: '', house: '', apartment: '' };
+                    this.pickupInfo = { date: '', time: '' };
+                    this.contactInfo = { name: '', phone: '', comment: '' };
+                    this.paymentMethod = 'card';
+                    this.cardInfo = { number: '', expiry: '', cvv: '' };
+                    this.orderNumber = Math.floor(Math.random() * 10000) + 1000;
+                },
+                showNotification(message) {
+                    // Создать элемент уведомления
+                    const notification = document.createElement('div');
+                    notification.className = 'alert alert-success notification';
+                    notification.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        ${message}
+                    `;
+                    
+                    // Добавить уведомление на страницу
+                    document.body.appendChild(notification);
+                    
+                    // Удалить уведомление через 3 секунды
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 3000);
+                }
+            },
+            mounted() {
+                // Загрузка корзины из localStorage
+                const savedCart = localStorage.getItem('streetCoffeeCart');
+                if (savedCart) {
+                    this.cart = JSON.parse(savedCart);
+                }
+                
+                // Сохранение корзины при изменении
+                this.$watch('cart', (newCart) => {
+                    localStorage.setItem('streetCoffeeCart', JSON.stringify(newCart));
+                }, { deep: true });
+                
+                // Установка минимальной даты для самовывоза (сегодня)
+                const today = new Date().toISOString().split('T')[0];
+                this.pickupInfo.date = today;
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

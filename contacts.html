@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreetCoffee - Контакты</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/contacts.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-coffee"></i>
+                    Street<span>Coffee</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="menu.html">Меню</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="reviews.html">Отзывы</a></li>
+                    <li><a href="contacts.html" class="active">Контакты</a></li>
+                    <li>
+                        <a href="checkout.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount"></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Наши контакты</h1>
+            <p>Приходите к нам в гости или свяжитесь удобным способом. Мы всегда рады вас видеть в Большом Камне!</p>
+        </div>
+    </section>
+
+    <section class="contacts-section">
+        <div class="container">
+            <div class="contacts-content">
+                <div class="contact-info">
+                    <h2><i class="fas fa-store"></i> Наша кофейня в Большом Камне</h2>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h3>Street Coffee</h3>
+                                <p>ул. Приморского Комсомола, 2, Большой Камень</p>
+                                <p>Телефон: +7 (984) 190-00-60</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="opening-hours">
+                        <h3><i class="fas fa-clock"></i> Часы работы</h3>
+                        <table class="hours-table">
+                            <tr>
+                                <td>Понедельник - Пятница</td>
+                                <td>7:00 - 22:00</td>
+                            </tr>
+                            <tr>
+                                <td>Суббота</td>
+                                <td>8:00 - 23:00</td>
+                            </tr>
+                            <tr>
+                                <td>Воскресенье</td>
+                                <td>8:00 - 21:00</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h3>Email</h3>
+                                <p>info@streetcoffee.ru</p>
+                                <a href="mailto:info@streetcoffee.ru" class="email-link">
+                                    <i class="fas fa-paper-plane"></i> Написать нам
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-parking"></i>
+                            </div>
+                            <div class="contact-item-content">
+                                <h3>Парковка</h3>
+                                <p>Бесплатная парковка рядом с кофейней</p>
+                            </div>
+                        </div>
+                        
+                       
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <h2><i class="fas fa-map-marked-alt"></i> Мы на карте</h2>
+                    <div id="map">
+                        <iframe 
+                            src="https://maps.google.com/maps?q=43.10822397812126,132.3482022209678&z=15&output=embed"
+                            width="100%" 
+                            height="400" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    <p class="map-description">Мы находимся в центре Большого Камня, рядом с набережной. Приходите насладиться лучшим кофе в городе!</p>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h3><i class="fas fa-envelope"></i> Напишите нам</h3>
+                <div class="gmail-contact-section">
+                    <p>Нажмите кнопку ниже, чтобы написать нам письмо напрямую через Gmail:</p>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=info@streetcoffee.ru&su=Вопрос%20по%20кофейне%20StreetCoffee&body=Здравствуйте!%0A%0AМеня%20зовут:%20%0A%0AМой%20вопрос:%20%0A%0AС%20уважением," 
+                       target="_blank" 
+                       class="gmail-link">
+                        <i class="fab fa-google"></i> Написать через Gmail
+                    </a>
+                    
+                    <div class="contact-options">
+                        <h4>Другие способы связи:</h4>
+                        <div class="option">
+                            <i class="fas fa-phone"></i>
+                            <span>Телефон: <a href="tel:+79841900060">+7 (984) 190-00-60</a></span>
+                        </div>
+                        <div class="option">
+                            <i class="fab fa-telegram"></i>
+                            <span>Telegram: <a href="https://t.me/streetcoffee_bk" target="_blank">@streetcoffee_bk</a></span>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-coffee"></i>
+                        Street<span>Coffee</span>
+                    </div>
+                    <p>Мы создаем лучший кофе для тех, кто ценит качество и атмосферу уличных кофеен в Большом Камне.</p>
+                  
+                </div>
+                <div class="footer-links">
+                    <h3>Навигация</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="menu.html"><i class="fas fa-utensils"></i> Меню</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="reviews.html"><i class="fas fa-comments"></i> Отзывы</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> ул. Приморского Комсомола, 2, Большой Камень</p>
+                    <p><i class="fas fa-phone"></i> +7 (984) 190-00-60</p>
+                    <p><i class="fas fa-envelope"></i> info@streetcoffee.ru</p>
+                    <p><i class="fas fa-clock"></i> Пн-Вс: 7:00-22:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 StreetCoffee. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <style>
+        .gmail-contact-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .gmail-link {
+            display: inline-block;
+            background: #dd4b39;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(221, 75, 57, 0.3);
+        }
+        
+        .gmail-link:hover {
+            background: #c23321;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(221, 75, 57, 0.4);
+        }
+        
+        .gmail-link i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .contact-options {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .contact-options h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .option i {
+            color: var(--primary-color);
+            width: 30px;
+            font-size: 18px;
+        }
+        
+        .option a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .option a:hover {
+            text-decoration: underline;
+        }
+        
+        .email-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .email-link:hover {
+            background: var(--primary-dark);
+        }
+        
+        .email-link i {
+            margin-right: 5px;
+        }
+    </style>
+</body>
+</html>

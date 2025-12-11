@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreetCoffee - Отзывы</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/reviews.css">
+    <style>
+        .stars-large {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .star-rating-display {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .stars-background {
+            color: #ddd;
+        }
+        
+        .stars-foreground {
+            color: #FFD700; /* Желтый цвет для звезд */
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        /* Стили для ответов на комментарии */
+        .reply-section {
+            margin-top: 10px;
+            padding-left: 20px;
+            border-left: 2px solid #e0e0e0;
+        }
+        
+        .reply-form {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .reply-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px 10px;
+            margin-top: 5px;
+        }
+        
+        .reply-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .reply {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .reply-content {
+            margin-top: 5px;
+        }
+        
+        .replies-container {
+            margin-top: 15px;
+        }
+        
+        /* Желтые звезды в отзывах */
+        .review-stars .fas.fa-star {
+            color: #FFD700;
+        }
+        
+        .review-stars .far.fa-star {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-coffee"></i>
+                    Street<span>Coffee</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="menu.html">Меню</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="reviews.html" class="active">Отзывы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li>
+                        <a href="checkout.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount"></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-comments"></i> Отзывы наших гостей</h1>
+            <p>Узнайте, что говорят о нас наши клиенты. Ваше мнение очень важно для нас!</p>
+        </div>
+    </section>
+
+    <section class="reviews-section">
+        <div class="container">
+            <div class="reviews-summary">
+                <div class="rating-overall">
+                    <div class="average-rating" id="averageRating">4.8</div>
+                    <div class="star-rating-display">
+                        <div class="stars-background">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stars-foreground" id="starsForeground" style="width: 96%">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="total-reviews" id="totalReviews">На основе 247 отзывов</div>
+                
+                <div class="rating-bars">
+                    <div class="rating-bar">
+                        <span class="rating-label">5 звезд</span>
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar5" style="width: 85%"></div>
+                        </div>
+                        <span class="rating-count" id="count5">210</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span class="rating-label">4 звезды</span>
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar4" style="width: 10%"></div>
+                        </div>
+                        <span class="rating-count" id="count4">25</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span class="rating-label">3 звезды</span>
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar3" style="width: 3%"></div>
+                        </div>
+                        <span class="rating-count" id="count3">8</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span class="rating-label">2 звезды</span>
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar2" style="width: 1%"></div>
+                        </div>
+                        <span class="rating-count" id="count2">3</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span class="rating-label">1 звезда</span>
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar1" style="width: 1%"></div>
+                        </div>
+                        <span class="rating-count" id="count1">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-reviews">
+                <button class="filter-btn active" data-filter="all">Все отзывы</button>
+                <button class="filter-btn" data-filter="5">5 звёзд</button>
+                <button class="filter-btn" data-filter="4">4 звезды</button>
+                <button class="filter-btn" data-filter="3">3 звезды</button>
+                <button class="filter-btn" data-filter="latest">Сначала новые</button>
+            </div>
+
+            <div id="reviewsContainer" class="reviews-grid">
+                <!-- Отзывы будут загружаться здесь -->
+            </div>
+
+            <div class="pagination">
+                <button id="prevPage" disabled>
+                    <i class="fas fa-chevron-left"></i> Назад
+                </button>
+                <div class="page-numbers" id="pageNumbers">
+                    <!-- Номера страниц будут генерироваться здесь -->
+                </div>
+                <button id="nextPage">
+                    Вперед <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="add-review-section">
+                <h2><i class="fas fa-pen"></i> Оставить отзыв</h2>
+                <form class="review-form" id="reviewForm">
+                    <div class="form-group">
+                        <label for="reviewName">Ваше имя *</label>
+                        <input type="text" id="reviewName" name="name" placeholder="Введите ваше имя" required>
+                    </div>
+                    
+                    <div class="rating-container">
+                        <label>Ваша оценка *</label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5" title="Отлично">★</label>
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4" title="Хорошо">★</label>
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3" title="Нормально">★</label>
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2" title="Плохо">★</label>
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1" title="Ужасно">★</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Ваш отзыв *</label>
+                        <textarea id="reviewText" name="text" placeholder="Поделитесь вашими впечатлениями о нашей кофейне..." required minlength="10"></textarea>
+                    </div>
+                    
+                    
+                    
+                    <button type="submit" class="submit-review">
+                        <i class="fas fa-paper-plane"></i> Опубликовать отзыв
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-coffee"></i>
+                        Street<span>Coffee</span>
+                    </div>
+                    <p>Мы создаем лучший кофе для тех, кто ценит качество и атмосферу уличных кофеен в Большом Камне.</p>
+                  
+                </div>
+                <div class="footer-links">
+                    <h3>Навигация</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="menu.html"><i class="fas fa-utensils"></i> Меню</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="reviews.html"><i class="fas fa-comments"></i> Отзывы</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> ул. Приморского Комсомола, 2, Большой Камень</p>
+                    <p><i class="fas fa-phone"></i> +7 (423) 456-78-90</p>
+                    <p><i class="fas fa-envelope"></i> info@streetcoffee.ru</p>
+                    <p><i class="fas fa-clock"></i> Пн-Вс: 7:00-22:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 StreetCoffee. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для просмотра изображений -->
+    <div class="image-modal" id="imageModal" style="display: none;">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <img id="modalImage" src="" alt="">
+            <button class="modal-nav prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="modal-nav next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Функция для сохранения данных в localStorage
+        function saveToLocalStorage(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Функция для загрузки данных из localStorage
+        function loadFromLocalStorage(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : null;
+        }
+
+        // Загрузка отзывов из localStorage или использование начальных данных
+        let reviews = loadFromLocalStorage('streetCoffeeReviews') || [
+            { id: 1, name: "Анна Смирнова", rating: 5, date: "2024-01-15", text: "Лучший кофе в городе! Атмосфера уютная, персонал приветливый. Особенно рекомендую латте с сиропом карамель.", photos: [], replies: [] },
+            { id: 2, name: "Дмитрий Ковалев", rating: 4, date: "2024-01-12", text: "Хорошая кофейня, качественный кофе. Цены немного выше среднего, но оно того стоит.", photos: [], replies: [] },
+            { id: 3, name: "Елена Васнецова", rating: 5, date: "2024-01-10", text: "Обожаю это место! Прихожу сюда каждое утро перед работой. Бариста всегда делают красивые рисунки на пенке.", photos: ["https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"], replies: [] },
+            { id: 4, name: "Игорь Петров", rating: 3, date: "2024-01-08", text: "Неплохо, но ожидал большего. Кофе хороший, но обслуживание могло бы быть быстрее в час пик.", photos: [], replies: [] },
+            { id: 5, name: "Мария Иванова", rating: 5, date: "2024-01-05", text: "Восхитительный капучино! Нигде больше не пробовала такой нежной молочной пенки. Обязательно вернусь!", photos: ["https://images.unsplash.com/photo-1561047029-3000c68339ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"], replies: [] },
+            { id: 6, name: "Сергей Новиков", rating: 5, date: "2024-01-03", text: "Отличное место для встреч с друзьями. Уютный интерьер, приятная музыка и, конечно, прекрасный кофе.", photos: [], replies: [] },
+            { id: 7, name: "Ольга Сидорова", rating: 4, date: "2023-12-28", text: "Хороший выбор десертов к кофе. Понравился чизкейк, но хотелось бы больше вариантов выпечки.", photos: [], replies: [] },
+            { id: 8, name: "Алексей Морозов", rating: 2, date: "2023-12-25", text: "Кофе был пережарен, чувствовалась горечь. Надеюсь, это была единичная ошибка.", photos: [], replies: [] },
+            { id: 9, name: "Татьяна Козлова", rating: 5, date: "2023-12-20", text: "Любимая кофейня! Особенно нравятся сезонные предложения. Зимний глинтвейн с корицей просто волшебный!", photos: ["https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"], replies: [] },
+            { id: 10, name: "Владимир Соколов", rating: 5, date: "2023-12-15", text: "Лучший эспрессо в городе! Насыщенный вкус, правильная крема. Настоящее итальянское качество.", photos: [], replies: [] }
+        ];
+
+        // Сохраняем начальные данные при первом запуске
+        if (!loadFromLocalStorage('streetCoffeeReviews')) {
+            saveToLocalStorage('streetCoffeeReviews', reviews);
+        }
+
+        // Функция для расчета статистики на основе реальных отзывов
+        function calculateStatistics() {
+            const totalReviews = reviews.length;
+            const ratingCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+            let totalRating = 0;
+            
+            reviews.forEach(review => {
+                ratingCounts[review.rating] = (ratingCounts[review.rating] || 0) + 1;
+                totalRating += review.rating;
+            });
+            
+            const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : "0.0";
+            
+            // Обновляем данные на странице
+            document.getElementById('averageRating').textContent = averageRating;
+            document.getElementById('totalReviews').textContent = `На основе ${totalReviews} отзывов`;
+            
+            // Обновляем звезды рейтинга (ширина в процентах)
+            const starPercentage = (averageRating / 5) * 100;
+            document.getElementById('starsForeground').style.width = `${starPercentage}%`;
+            
+            // Обновляем статистику по звездам
+            for (let i = 1; i <= 5; i++) {
+                const count = ratingCounts[i] || 0;
+                const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
+                
+                document.getElementById(`count${i}`).textContent = count;
+                document.getElementById(`bar${i}`).style.width = `${percentage}%`;
+            }
+        }
+
+        // Функция для отображения отзывов
+function displayReviews(reviewsToShow = reviews) {
+    const container = document.getElementById('reviewsContainer');
+    container.innerHTML = '';
+    
+    reviewsToShow.forEach(review => {
+        const reviewElement = document.createElement('div');
+        reviewElement.className = 'review-card';
+        reviewElement.dataset.id = review.id;
+        
+        // Создаем звезды рейтинга
+        let starsHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= review.rating) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            } else {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+        }
+        
+        // Форматируем дату - исправленная версия
+        let formattedDate;
+        try {
+            const date = new Date(review.date);
+            if (isNaN(date.getTime())) {
+                // Если дата некорректная, используем текущую дату
+                formattedDate = new Date().toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            } else {
+                formattedDate = date.toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            }
+        } catch (error) {
+            // В случае ошибки используем текущую дату
+            formattedDate = new Date().toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+        
+        // Фотографии если есть
+        let photosHTML = '';
+        if (review.photos && review.photos.length > 0) {
+            photosHTML = '<div class="review-photos">';
+            review.photos.forEach(photo => {
+                photosHTML += `<img src="${photo}" alt="Фото отзыва" class="review-photo">`;
+            });
+            photosHTML += '</div>';
+        }
+        
+        // Ответы на комментарий
+        let repliesHTML = '';
+        if (review.replies && review.replies.length > 0) {
+            repliesHTML = '<div class="replies-container">';
+            review.replies.forEach(reply => {
+                // Форматируем дату ответа
+                let formattedReplyDate;
+                try {
+                    const replyDate = new Date(reply.date);
+                    if (isNaN(replyDate.getTime())) {
+                        formattedReplyDate = new Date().toLocaleDateString('ru-RU', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        });
+                    } else {
+                        formattedReplyDate = replyDate.toLocaleDateString('ru-RU', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        });
+                    }
+                } catch (error) {
+                    formattedReplyDate = new Date().toLocaleDateString('ru-RU', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                }
+                
+                repliesHTML += `
+                    <div class="reply">
+                        <div class="reply-header">
+                            <strong>${reply.name}</strong>
+                            <span>${formattedReplyDate}</span>
+                        </div>
+                        <div class="reply-content">${reply.text}</div>
+                    </div>
+                `;
+            });
+            repliesHTML += '</div>';
+        }
+        
+        // Форма для ответа
+        const replyFormHTML = `
+            <div class="reply-form" id="replyForm-${review.id}">
+                <textarea id="replyText-${review.id}" placeholder="Напишите ответ..." rows="2"></textarea>
+                <div style="margin-top: 5px;">
+                    <button type="button" class="reply-btn" onclick="submitReply(${review.id})">Отправить</button>
+                    <button type="button" class="reply-btn" onclick="cancelReply(${review.id})">Отмена</button>
+                </div>
+            </div>
+        `;
+        
+        reviewElement.innerHTML = `
+            <div class="review-header">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div>
+                        <h4>${review.name}</h4>
+                        <div class="review-date">${formattedDate}</div>
+                    </div>
+                </div>
+                <div class="review-stars">
+                    ${starsHTML}
+                </div>
+            </div>
+            <div class="review-content">
+                <p>${review.text}</p>
+                ${photosHTML}
+                <div class="reply-section">
+                    <button class="reply-btn" onclick="showReplyForm(${review.id})">
+                        <i class="fas fa-reply"></i> Ответить
+                    </button>
+                    ${review.replies && review.replies.length > 0 ? 
+                        `<span style="margin-left: 10px; color: #666; font-size: 14px;">
+                            ${review.replies.length} ответ${review.replies.length === 1 ? '' : 'а'}
+                        </span>` : ''}
+                    ${replyFormHTML}
+                    ${repliesHTML}
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(reviewElement);
+    });
+}
+        // Функция для показа формы ответа
+        function showReplyForm(reviewId) {
+            const replyForm = document.getElementById(`replyForm-${reviewId}`);
+            replyForm.style.display = 'block';
+        }
+
+        // Функция для отмены ответа
+        function cancelReply(reviewId) {
+            const replyForm = document.getElementById(`replyForm-${reviewId}`);
+            const replyText = document.getElementById(`replyText-${reviewId}`);
+            replyText.value = '';
+            replyForm.style.display = 'none';
+        }
+
+        // Функция для отправки ответа
+function submitReply(reviewId) {
+    const replyText = document.getElementById(`replyText-${reviewId}`).value.trim();
+    if (!replyText) {
+        alert('Пожалуйста, введите текст ответа');
+        return;
+    }
+    
+    const review = reviews.find(r => r.id === reviewId);
+    if (review) {
+        if (!review.replies) {
+            review.replies = [];
+        }
+        
+        const newReply = {
+            id: Date.now(),
+            name: "Администратор StreetCoffee",
+            date: new Date().toISOString().split('T')[0], // Исправлено: правильный формат даты
+            text: replyText
+        };
+        
+        review.replies.push(newReply);
+        
+        // Сохраняем в localStorage
+        saveToLocalStorage('streetCoffeeReviews', reviews);
+        
+        // Обновляем отображение
+        displayReviews();
+        
+        // Закрываем форму
+        cancelReply(reviewId);
+        
+        // Показываем уведомление
+        alert('Ответ успешно добавлен!');
+    }
+}
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Рассчитываем и отображаем статистику
+            calculateStatistics();
+            
+            // Отображаем отзывы
+            displayReviews();
+            
+            // Функционал фильтрации (УБРАН ФИЛЬТР ДЛЯ ФОТО И ОТВЕТОВ)
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.dataset.filter;
+                    let filteredReviews = [...reviews];
+                    
+                    if (filter === '5' || filter === '4' || filter === '3') {
+                        filteredReviews = reviews.filter(r => r.rating === parseInt(filter));
+                    } else if (filter === 'latest') {
+                        filteredReviews = [...reviews].sort((a, b) => new Date(b.date) - new Date(a.date));
+                    }
+                    // Фильтры "with-photos" и "with-replies" УДАЛЕНЫ
+                    
+                    displayReviews(filteredReviews);
+                });
+            });
+            
+            // Обработка формы отзыва
+            document.getElementById('reviewForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('reviewName').value;
+                const rating = document.querySelector('input[name="rating"]:checked')?.value;
+                const text = document.getElementById('reviewText').value;
+                
+                if (!name || !rating || !text) {
+                    alert('Пожалуйста, заполните все обязательные поля');
+                    return;
+                }
+                
+               // Создаем новый отзыв
+const newReview = {
+    id: Date.now(),
+    name: name,
+    rating: parseInt(rating),
+    date: new Date().toISOString().split('T')[0], // Исправлено: правильный формат даты
+    text: text,
+    photos: [], // В реальном приложении здесь была бы загрузка фото
+    replies: []
+};
+                
+                // Добавляем отзыв в массив
+                reviews.unshift(newReview);
+                
+                // Сохраняем в localStorage
+                saveToLocalStorage('streetCoffeeReviews', reviews);
+                
+                // Пересчитываем статистику
+                calculateStatistics();
+                
+                // Отображаем все отзывы
+                displayReviews();
+                
+                // Сбрасываем форму
+                this.reset();
+                document.getElementById('previewImages').innerHTML = '';
+                
+                // Показываем сообщение об успехе
+                alert('Спасибо за ваш отзыв! Он был успешно добавлен.');
+            });
+            
+            // Предварительный просмотр фото
+            document.getElementById('reviewPhotos').addEventListener('change', function(e) {
+                const previewContainer = document.getElementById('previewImages');
+                previewContainer.innerHTML = '';
+                
+                const files = Array.from(this.files).slice(0, 3); // Максимум 3 файла
+                
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'preview-image';
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            });
+            
+            // Пагинация (упрощенная версия)
+            const reviewsPerPage = 5;
+            let currentPage = 1;
+            
+            function updatePagination() {
+                const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+                const startIndex = (currentPage - 1) * reviewsPerPage;
+                const endIndex = startIndex + reviewsPerPage;
+                const pageReviews = reviews.slice(startIndex, endIndex);
+                
+                displayReviews(pageReviews);
+                
+                // Обновляем кнопки пагинации
+                document.getElementById('prevPage').disabled = currentPage === 1;
+                document.getElementById('nextPage').disabled = currentPage === totalPages;
+                
+                // Обновляем номера страниц
+                const pageNumbers = document.getElementById('pageNumbers');
+                pageNumbers.innerHTML = '';
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = i === currentPage ? 'active' : '';
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        updatePagination();
+                    });
+                    pageNumbers.appendChild(pageBtn);
+                }
+            }
+            
+            // Инициализация пагинации
+            updatePagination();
+            
+            // Обработчики кнопок пагинации
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+            
+            // Сохраняем данные при закрытии страницы
+            window.addEventListener('beforeunload', function() {
+                saveToLocalStorage('streetCoffeeReviews', reviews);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreetCoffee - Главная</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-coffee"></i>
+                    Street<span>Coffee</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="active">Главная</a></li>
+                    <li><a href="menu.html">Меню</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="reviews.html">Отзывы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li>
+                        <a href="checkout.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount"></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-background"></div>
+            <div class="hero-content">
+                <h1>Настоящий кофе для настоящих моментов</h1>
+                <p>Каждая чашка StreetCoffee - это уникальное сочетание качества, вкуса и атмосферы уличной кофейни в Большом Камне</p>
+                <a href="menu.html" class="btn">
+                    <i class="fas fa-coffee"></i> Посмотреть меню
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-coffee"></i>
+                        Street<span>Coffee</span>
+                    </div>
+                    <p>Мы создаем лучший кофе для тех, кто ценит качество и атмосферу уличных кофеен в Большом Камне.</p>
+                    
+                </div>
+                <div class="footer-links">
+                    <h3>Навигация</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="menu.html"><i class="fas fa-utensils"></i> Меню</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="reviews.html"><i class="fas fa-comments"></i> Отзывы</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Контакты</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> ул. Приморского Комсомола, 2, Большой Камень</p>
+                    <p><i class="fas fa-phone"></i> +7 (984) 190-00-60</p>
+                    <p><i class="fas fa-envelope"></i> info@streetcoffee.ru</p>
+                    <p><i class="fas fa-clock"></i> Пн-Вс: 7:00-22:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 StreetCoffee. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemData = JSON.parse(this.getAttribute('data-item'));
+                cart.addItem(itemData);
+                
+                // Animation feedback
+                this.innerHTML = '<i class="fas fa-check"></i> Добавлено';
+                this.style.background = '#4CAF50';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-plus"></i> В корзину';
+                    this.style.background = '';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
